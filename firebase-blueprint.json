@@ -1,0 +1,121 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "A user of the Bharat Chamber RAG Explorer.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "email": { "type": "string", "format": "email" },
+        "displayName": { "type": "string" },
+        "role": { "type": "string", "enum": ["admin", "user"] }
+      },
+      "required": ["uid", "email"]
+    },
+    "ChatMessage": {
+      "title": "Chat Message",
+      "description": "A message in a chat session.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "sessionId": { "type": "string" },
+        "text": { "type": "string" },
+        "role": { "type": "string", "enum": ["user", "bot"] },
+        "timestamp": { "type": "string", "format": "date-time" },
+        "sources": { "type": "array", "items": { "type": "string" } }
+      },
+      "required": ["uid", "sessionId", "text", "role", "timestamp"]
+    },
+    "ChatSession": {
+      "title": "Chat Session",
+      "description": "A collection of messages.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "title": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "title", "createdAt"]
+    },
+    "Feedback": {
+      "title": "Feedback",
+      "description": "User feedback or issue report.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "email": { "type": "string" },
+        "comment": { "type": "string" },
+        "type": { "type": "string", "enum": ["feedback", "issue"] },
+        "timestamp": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "comment", "timestamp"]
+    },
+    "Task": {
+      "title": "Task",
+      "description": "A user task.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "title": { "type": "string" },
+        "completed": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "title", "completed", "createdAt"]
+    },
+    "CustomAgent": {
+      "title": "Custom Agent",
+      "description": "A user-defined custom agent.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "label": { "type": "string" },
+        "desc": { "type": "string" },
+        "icon": { "type": "string" },
+        "category": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "label", "desc", "createdAt"]
+    },
+    "SystemConfig": {
+      "title": "System Config",
+      "description": "Global system configuration for the Bharat Chamber app.",
+      "type": "object",
+      "properties": {
+        "keys": { "type": "object" },
+        "knowledgeBases": { "type": "array", "items": { "type": "object" } },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["updatedAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "User",
+      "description": "User profile data."
+    },
+    "/sessions/{sessionId}": {
+      "schema": "ChatSession",
+      "description": "Chat sessions."
+    },
+    "/chats/{chatId}": {
+      "schema": "ChatMessage",
+      "description": "Individual chat messages."
+    },
+    "/feedback/{feedbackId}": {
+      "schema": "Feedback",
+      "description": "User feedback."
+    },
+    "/tasks/{taskId}": {
+      "schema": "Task",
+      "description": "User tasks."
+    },
+    "/custom_agents/{agentId}": {
+      "schema": "CustomAgent",
+      "description": "Custom agents."
+    },
+    "/system_config/{configId}": {
+      "schema": "SystemConfig",
+      "description": "Global system configuration."
+    }
+  }
+}

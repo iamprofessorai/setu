@@ -1,0 +1,198 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+  
+  --animate-scan: scan 3s linear infinite;
+  --animate-pulse-glow: pulse-glow 2s infinite;
+  --animate-running-line: running-line 4s linear infinite;
+  --animate-tilt: tilt 5s linear infinite;
+
+  @keyframes scan {
+    0% { transform: translateY(-100%); }
+    100% { transform: translateY(100%); }
+  }
+
+  @keyframes pulse-glow {
+    0%, 100% { box-shadow: 0 0 5px rgba(var(--primary-rgb), 0.4); filter: brightness(1); }
+    50% { box-shadow: 0 0 20px rgba(var(--primary-rgb), 0.6); filter: brightness(1.2); }
+  }
+
+  @keyframes tilt {
+    0%, 50%, 100% { transform: rotate(0deg); }
+    25% { transform: rotate(5deg); }
+    75% { transform: rotate(-5deg); }
+  }
+
+  @keyframes running-line {
+    0% { background-position: 0% 50%; }
+    100% { background-position: 200% 50%; }
+  }
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap');
+
+:root {
+  --primary: #2563eb;
+  --primary-rgb: 37, 99, 235;
+  --secondary: #059669;
+  --secondary-rgb: 5, 150, 105;
+  --accent: #7c3aed;
+  --accent-rgb: 124, 58, 237;
+  --background: #f8fafc;
+  --text: #0f172a;
+  --sidebar: #ffffff;
+  --sidebar-text: #0f172a;
+  
+  --bg: var(--background);
+  --ink: var(--text);
+  --line: var(--primary);
+}
+
+.running-line-border {
+  position: relative;
+  background: var(--background);
+}
+
+.running-line-border::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  z-index: -1;
+  background: linear-gradient(90deg, var(--primary), var(--secondary), var(--accent), var(--primary));
+  background-size: 200% 100%;
+  animation: running-line 3s linear infinite;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.running-line-border:focus-within::before {
+  opacity: 1;
+}
+
+body {
+  @apply antialiased transition-colors duration-300;
+  background-color: var(--background);
+  color: var(--text);
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+}
+
+.technical-grid {
+  background-image: 
+    linear-gradient(to right, rgba(var(--primary-rgb), 0.1) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(var(--primary-rgb), 0.1) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+.data-value {
+  font-family: var(--font-mono);
+  letter-spacing: -0.02em;
+  font-weight: 900;
+}
+
+.micro-label {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.25em;
+  font-weight: 900;
+  color: var(--secondary);
+  opacity: 1;
+}
+
+/* Custom Scrollbar */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: var(--background);
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: var(--primary);
+  border-radius: 0px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: var(--secondary);
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Glass Morphism - More Solid for Professional Look */
+.glass-panel {
+  @apply border-2 shadow-xl;
+  background-color: var(--background);
+  border-color: var(--primary);
+}
+
+/* Premium Gradient Text */
+.gold-text {
+  background: linear-gradient(to bottom right, var(--secondary), var(--primary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.red-text {
+  background: linear-gradient(to bottom right, var(--primary), var(--secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Markdown Styling */
+.prose p {
+  @apply mb-4 leading-relaxed;
+}
+.prose strong {
+  @apply font-bold;
+}
+.prose h1, .prose h2, .prose h3, .prose h4 {
+  @apply font-bold mt-6 mb-3;
+}
+.prose table {
+  @apply w-full border-collapse my-4 text-[10px] md:text-[12px] table-auto;
+  border: 1px solid rgba(255, 153, 51, 0.2);
+}
+.prose-container {
+  @apply overflow-x-auto max-w-full;
+}
+.prose th {
+  @apply border p-2 text-left font-black uppercase tracking-widest whitespace-nowrap;
+  background-color: rgba(255, 153, 51, 0.1);
+  border-color: rgba(255, 153, 51, 0.2);
+}
+.prose td {
+  @apply border p-2 transition-colors whitespace-nowrap;
+  border-color: rgba(255, 153, 51, 0.1);
+}
+.prose tr:hover td {
+  background-color: rgba(255, 153, 51, 0.05);
+}
+.prose code {
+  @apply px-1.5 py-0.5 rounded-none font-mono text-[10px] border;
+  background-color: rgba(255, 153, 51, 0.1);
+  color: var(--primary);
+  border-color: rgba(255, 153, 51, 0.2);
+}
+.prose pre {
+  @apply p-4 rounded-none bg-black/90 border-2 my-4 overflow-x-auto;
+  border-color: rgba(255, 153, 51, 0.3);
+}
+.prose pre code {
+  @apply p-0 bg-transparent border-none;
+  color: rgba(255, 153, 51, 0.9);
+}
+.prose blockquote {
+  @apply border-l-4 pl-4 italic opacity-80;
+  border-color: var(--primary);
+}
+.prose ul, .prose ol {
+  @apply my-4 ml-4 space-y-1;
+}
+.prose li {
+  @apply list-disc;
+}

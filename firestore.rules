@@ -1,0 +1,86 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // ===============================================================
+    // Assumed Data Model (PROTOTYPE MODE - UNRESTRICTED)
+    // ===============================================================
+    
+    // Helper Functions
+    function isValidEmail(email) {
+      return email is string && email.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$");
+    }
+
+    // Domain Validators (Simplified for Prototype)
+    function isValidChatMessage(data) {
+      return data.keys().hasAll(['uid', 'sessionId', 'text', 'role', 'timestamp']) &&
+             data.uid is string &&
+             data.sessionId is string &&
+             data.text is string && data.text.size() < 5000 &&
+             data.role in ['user', 'bot'] &&
+             data.timestamp is timestamp;
+    }
+    function isValidSession(data) {
+      return data.keys().hasAll(['uid', 'title', 'createdAt']) &&
+             data.uid is string &&
+             data.title is string && data.title.size() > 0 &&
+             data.createdAt is timestamp;
+    }
+    function isValidFeedback(data) {
+      return data.keys().hasAll(['uid', 'comment', 'type', 'timestamp']) &&
+             data.uid is string &&
+             data.comment is string && data.comment.size() > 0 &&
+             data.type in ['feedback', 'issue'] &&
+             data.timestamp is timestamp;
+    }
+    function isValidTask(data) {
+      return data.keys().hasAll(['uid', 'title', 'completed', 'createdAt']) &&
+             data.uid is string &&
+             data.title is string && data.title.size() > 0 &&
+             data.completed is bool &&
+             data.createdAt is timestamp;
+    }
+    function isValidCustomAgent(data) {
+      return data.keys().hasAll(['uid', 'label', 'desc', 'icon', 'category', 'createdAt']) &&
+             data.uid is string &&
+             data.label is string && data.label.size() > 0 &&
+             data.desc is string &&
+             data.icon is string &&
+             data.category is string &&
+             data.createdAt is timestamp;
+    }
+
+    // UNRESTRICTED ACCESS FOR PROTOTYPE
+    match /users/{userId} {
+      allow read, write: if true;
+    }
+
+    match /sessions/{sessionId} {
+      allow read, delete: if true;
+      allow create, update: if isValidSession(request.resource.data);
+    }
+
+    match /chats/{chatId} {
+      allow read, delete: if true;
+      allow create: if isValidChatMessage(request.resource.data);
+    }
+
+    match /feedback/{feedbackId} {
+      allow read, delete: if true;
+      allow create: if isValidFeedback(request.resource.data);
+    }
+
+    match /tasks/{taskId} {
+      allow read, delete: if true;
+      allow create, update: if isValidTask(request.resource.data);
+    }
+
+    match /custom_agents/{agentId} {
+      allow read, delete: if true;
+      allow create: if isValidCustomAgent(request.resource.data);
+    }
+
+    match /system_config/{configId} {
+      allow read, write: if true;
+    }
+  }
+}
