@@ -1,0 +1,9 @@
+{
+  "name": "SETU MATRIX",
+  "description": "Senior Trade Strategist & Digital Envoy for the Bharat Chamber of Commerce. A high-level RAG agent bridging trade data and business intelligence.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone",
+    "geolocation"
+  ]
+}
